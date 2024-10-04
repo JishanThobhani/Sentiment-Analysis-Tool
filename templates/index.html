@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Comment Sentiment Analysis</h1>
+        <form id="commentForm">
+            <textarea id="comment" name="comment" rows="4" placeholder="Type your comment here..."></textarea>
+            <button type="submit">Analyze Sentiment</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('commentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const comment = document.getElementById('comment').value;
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'comment': comment
+                })
+            });
+
+            const data = await response.json();
+            document.getElementById('result').textContent = `Sentiment: ${data.result}`;
+        });
+    </script>
+</body>
+</html>
